@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+	<servlet-name>UploadHandleServlet</servlet-name>
+	<servlet-class>com.liuningfei.uploadFile.UploadHandleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>UploadHandleServlet</servlet-name>
+	<url-pattern>/UploadHandleServlet</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
+	<servlet-name>UploadHandleServletPro</servlet-name>
+	<servlet-class>com.liuningfei.uploadFile.UploadHandleServletPro</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>UploadHandleServletPro</servlet-name>
+	<url-pattern>/UploadHandleServletPro</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
+	<servlet-name>ListFileServlet</servlet-name>
+	<servlet-class>com.liuningfei.uploadFile.ListFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>ListFileServlet</servlet-name>
+	<url-pattern>/ListFileServlet</url-pattern>
+	</servlet-mapping>  
+	
+	<servlet>
+	<servlet-name>DownLoadServlet</servlet-name>
+	<servlet-class>com.liuningfei.uploadFile.DownLoadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>DownLoadServlet</servlet-name>
+	<url-pattern>/DownLoadServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>HelloWorld</servlet-name>
+	<servlet-class>com.liuningfei.uploadFile.HelloWorld</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>HelloWorld</servlet-name>
+	<url-pattern>/HelloWorld</url-pattern>
+	</servlet-mapping>
+	
+</web-app>
