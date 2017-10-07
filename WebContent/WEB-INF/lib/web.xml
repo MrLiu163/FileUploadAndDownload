@@ -45,4 +45,31 @@
 	<url-pattern>/HelloWorld</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+	<servlet-name>AddEmployee</servlet-name>
+	<servlet-class>com.liuningfei.employeeList.AddEmployee</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>AddEmployee</servlet-name>
+	<url-pattern>/AddEmployee</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>RemoveEmployee</servlet-name>
+	<servlet-class>com.liuningfei.employeeList.RemoveEmployee</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>RemoveEmployee</servlet-name>
+	<url-pattern>/RemoveEmployee</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>SearchEmployee</servlet-name>
+	<servlet-class>com.liuningfei.employeeList.SearchEmployee</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>SearchEmployee</servlet-name>
+	<url-pattern>/SearchEmployee</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
