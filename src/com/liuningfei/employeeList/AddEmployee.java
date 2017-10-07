@@ -23,8 +23,8 @@ public class AddEmployee extends HttpServlet {
 	// JDBC 驱动名及数据库 URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
 //    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB";
-//    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
-    static final String DB_URL = "jdbc:mysql://192.168.1.88:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
+    static final String DB_URL = "jdbc:mysql://192.168.0.103:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
+//    static final String DB_URL = "jdbc:mysql://192.168.1.88:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
 //    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB?useUnicode=true&amp;characterEncoding=UTF-8";
     // 数据库的用户名与密码，需要根据自己的设置 //amp;
     static final String USER = "root";
