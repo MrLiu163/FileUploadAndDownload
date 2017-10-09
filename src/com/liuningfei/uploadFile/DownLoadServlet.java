@@ -41,7 +41,7 @@ public class DownLoadServlet extends HttpServlet {
 		System.out.println("------DownLoadServlet----->>>>>>>>>");
 		//得到要下载的文件名
 		String fileName = request.getParameter("filename");  //23239283-92489-阿凡达.avi
-		fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
+//		fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
 		//上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
 		String fileSaveRootPath=this.getServletContext().getRealPath("/WEB-INF/upload");
 		//通过文件名找出文件的所在目录
