@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.liuningfei.tools.DatabaseConnectionHelper;
 import com.liuningfei.tools.ZipHelper;
 
 import java.sql.Connection;
@@ -286,11 +287,9 @@ public class UploadHandleServletPro extends HttpServlet {
 	
 	// 将上传的文件的信息写入数据库
 	private void insertUploadFileInfoIntoDatabase(String fileName, String fileUrl) {
-		
-//		response.setContentType("application/json;charset=UTF-8");
-//		request.setCharacterEncoding("utf-8");
-//		PrintWriter out = this.responseObj.getWriter();
-		
+		String sql = "insert into uploadFiles(fileName, fileUrl)values(\'"+ fileName + "\',\'" + fileUrl + "\')";
+		DatabaseConnectionHelper.executeSqliteOperationWithSqlString(sql);
+		/*
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -323,6 +322,7 @@ public class UploadHandleServletPro extends HttpServlet {
 		}finally {
 			
 		}
+		*/
 	}
 	
 }

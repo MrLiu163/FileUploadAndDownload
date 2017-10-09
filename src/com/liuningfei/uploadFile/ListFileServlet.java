@@ -2,6 +2,7 @@ package com.liuningfei.uploadFile;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,21 +18,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liuningfei.tools.DatabaseConnectionHelper;
+
 /**
  * Servlet implementation class ListFileServlet
  */
 @WebServlet("/ListFileServlet")
 public class ListFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	// JDBC 驱动名及数据库 URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-//    static final String DB_URL = "jdbc:mysql://localhost:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
-//    static final String DB_URL = "jdbc:mysql://192.168.1.28:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
-    static final String DB_URL = "jdbc:mysql://192.168.1.88:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
-    // 数据库的用户名与密码，需要根据自己的设置
-    static final String USER = "root";
-    static final String PASS = "123456";
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,41 +41,15 @@ public class ListFileServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
-		/*
-		 * 
-		//获取上传文件的目录
-		String uploadFilePath = this.getServletContext().getRealPath("/WEB-INF/upload");
-		//存储要下载的文件名
-		Map<String,String> fileNameMap = new HashMap<String,String>();
-		//递归遍历filepath目录下的所有文件和目录，将文件的文件名存储到map集合中
-		listfile(new File(uploadFilePath),fileNameMap);//File既可以代表一个文件也可以代表一个目录
-		//将Map集合发送到listfile.jsp页面进行显示
-		request.setAttribute("fileNameMap", fileNameMap);
-		request.getRequestDispatcher("/listfile.jsp").forward(request, response);
-		*/
 		
 		// 通过servelet将数据库中存储的文件 展示到界面上进行下载
 		response.setContentType("text/html;charset=UTF-8");
 		
 		PrintWriter out = response.getWriter();
 		
-		Connection conn = null;
-		Statement stmt = null;
 		try {
-			// 注册 JDBC 驱动
-            Class.forName("com.mysql.jdbc.Driver");
-        
-            // 打开链接
-            System.out.println("连接数据库...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            // 执行查询
-            System.out.println(" 实例化Statement对...");
-            stmt = conn.createStatement();
-            String sql;
-//            sql = "SELECT id, name, url FROM websites";
-            sql = "SELECT id, fileName, fileUrl FROM uploadFiles";
-            ResultSet rs = stmt.executeQuery(sql);
-        
+            String sql = "SELECT id, fileName, fileUrl FROM uploadFiles";
+            ResultSet rs = DatabaseConnectionHelper.executeQueryOperationWithSqlString(sql);
             String docType = "<!DOCTYPE html> \n";
             String helperStr = "";
             // 展开结果集数据库
@@ -100,6 +68,7 @@ public class ListFileServlet extends HttpServlet {
 //                helperStr = helperStr + "\n" + "<form action=\"/FileUploadAndDownloadPro0911/DownLoadServlet\" method=\"POST\">文件名称：<input type=\"text\" value=\"" + fileUrl + "\" name=\"filename\""  + "\n" + 
 //                		"/><br/>网址：<input type=\"submit\" value=\"下载\""  + "\n" + 
 //                		"/></form>";
+                fileUrl = URLEncoder.encode(fileUrl, "UTF-8");
                 helperStr = helperStr  + "<span>" + fileName + "</span>" + "<a href=\"/DownLoadServlet?filename=" + fileUrl + "\">下载</a>";
                 		// disabled=\"disabled\"
             }
@@ -113,35 +82,12 @@ public class ListFileServlet extends HttpServlet {
                           helperStr +
                           "</body></html>");
 
-            /*
-            String finalResponseString = "{\"list\":" + "[";
-            // 展开结果集数据库
-            while(rs.next()){
-                // 通过字段检索
-                int id  = rs.getInt("id");
-                String name = rs.getString("name");
-//                String url = rs.getString("url");
-                String gender = rs.getString("gender");
-                String phone = rs.getString("phone");
-                // 输出数据
-                System.out.print("ID: " + id);
-                System.out.print(", 站点名称: " + name);
-//                System.out.print(", 站点 URL: " + url);
-                System.out.print("\n");
-//                finalResponseString = finalResponseString + "{\"id\":\"" + id + "\",\n" + 
-//                "\"name\":\"" + name + "\",\n" + "\"url\":\"" + url + "\"\n},";
-                finalResponseString = finalResponseString + "{\"id\":\"" + id + "\",\n" + 
-                      "\"name\":\"" + name + "\",\n" + "\"gender\":\"" + gender + "\",\n" + "\"phone\":\"" + phone + "\"\n},";
-            }
-            finalResponseString = finalResponseString + "]}";
-            System.out.println(finalResponseString);
-            out.write(finalResponseString);
-//            out.write("{\"name\":\"菜鸟教程标识\"}");
- */
             // 完成后关闭
-            rs.close();
-            stmt.close();
-            conn.close();
+            Connection conn = rs.getStatement().getConnection();
+			Statement stmt = rs.getStatement();
+			rs.close();
+			conn.close();
+			stmt.close();
 		}catch (SQLException se) {
 			// TODO: handle exception
 			se.printStackTrace();
@@ -151,9 +97,7 @@ public class ListFileServlet extends HttpServlet {
 		}finally {
 			
 		}
-		
-//		out.println("{\"name\" : \"This is test signal\"}");
-		
+				
 	}
 
 	/**

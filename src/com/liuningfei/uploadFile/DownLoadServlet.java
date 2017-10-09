@@ -40,8 +40,8 @@ public class DownLoadServlet extends HttpServlet {
 		
 		System.out.println("------DownLoadServlet----->>>>>>>>>");
 		//得到要下载的文件名
-		String fileName = request.getParameter("filename");  //23239283-92489-阿凡达.avi
-//		fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
+		String fileName = request.getParameter("filename");  
+		fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
 		//上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
 		String fileSaveRootPath=this.getServletContext().getRealPath("/WEB-INF/upload");
 		//通过文件名找出文件的所在目录
@@ -62,6 +62,16 @@ public class DownLoadServlet extends HttpServlet {
 		String realname = fileName.substring(fileName.indexOf("_")+1);
 		//设置响应头，控制浏览器下载该文件
 		response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(realname, "UTF-8"));
+		/*
+//		realname = URLEncoder.encode(realname, "UTF-8");
+		// see http://support.microsoft.com/default.aspx?kbid=816868
+		if (realname.length() > 150) {
+			String guessCharset = "gb2312";
+			//根据request的locale 得出可能的编码，中文操作系统通常是gb2312
+			realname = new String(realname.getBytes(guessCharset), "ISO8859-1");
+		}
+		response.setHeader("Content-Disposition", "attachment; filename=" + realname);
+		*/
 		//读取要下载的文件，保存到文件输入流
 //		FileInputStream in = new FileInputStream(path + "\\" + fileName);
 		FileInputStream in = new FileInputStream(path + System.getProperty("file.separator") + fileName);

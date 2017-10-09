@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liuningfei.tools.DatabaseConnectionHelper;
+
 //import com.mysql.jdbc.Connection;
 //import com.mysql.jdbc.Statement;
 
@@ -21,14 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/SearchEmployee")
 public class SearchEmployee extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	// JDBC 驱动名及数据库 URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-    static final String DB_URL = "jdbc:mysql://192.168.0.103:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
-//    static final String DB_URL = "jdbc:mysql://192.168.1.88:3306/RUNOOB?useUnicode=true&characterEncoding=utf-8";
-    // 数据库的用户名与密码，需要根据自己的设置
-    static final String USER = "root";
-    static final String PASS = "123456";
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,25 +41,11 @@ public class SearchEmployee extends HttpServlet {
 		response.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		
-		Connection conn = null;
-		Statement stmt = null;
-		try {
-			// 注册 JDBC 驱动
-            Class.forName("com.mysql.jdbc.Driver");
-        
-            // 打开链接
-            System.out.println("连接数据库...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            // 执行查询
-            System.out.println(" 实例化Statement对...");
-            stmt = conn.createStatement();
-            String sql;
-//            sql = "SELECT id, name, url FROM websites";
-            sql = "SELECT id, name, gender, phone FROM employee";
-            ResultSet rs = stmt.executeQuery(sql);
-        
-            String finalResponseString = "{\"list\":" + "[";
-            // 展开结果集数据库
+		String sql = "SELECT id, name, gender, phone FROM employee";
+		ResultSet rs = DatabaseConnectionHelper.executeQueryOperationWithSqlString(sql);
+		String finalResponseString = "{\"list\":" + "[";
+        try {
+        	// 展开结果集数据库
             while(rs.next()){
                 // 通过字段检索
                 int id  = rs.getInt("id");
@@ -74,35 +54,23 @@ public class SearchEmployee extends HttpServlet {
                 String gender = rs.getString("gender");
                 String phone = rs.getString("phone");
                 // 输出数据
-                System.out.print("ID: " + id);
-                System.out.print(", 站点名称: " + name);
-//                System.out.print(", 站点 URL: " + url);
-                System.out.print("\n");
 //                finalResponseString = finalResponseString + "{\"id\":\"" + id + "\",\n" + 
 //                "\"name\":\"" + name + "\",\n" + "\"url\":\"" + url + "\"\n},";
                 finalResponseString = finalResponseString + "{\"id\":\"" + id + "\",\n" + 
                       "\"name\":\"" + name + "\",\n" + "\"gender\":\"" + gender + "\",\n" + "\"phone\":\"" + phone + "\"\n},";
             }
             finalResponseString = finalResponseString + "]}";
-            System.out.println(finalResponseString);
-            out.write(finalResponseString);
-//            out.write("{\"name\":\"菜鸟教程标识\"}");
+            out.write(finalResponseString);            
             // 完成后关闭
-            rs.close();
-            stmt.close();
-            conn.close();
-		}catch (SQLException se) {
-			// TODO: handle exception
-			se.printStackTrace();
-		}catch (Exception e) {
-			// TODO: handle exception
+            Connection conn = rs.getStatement().getConnection();
+			Statement stmt = rs.getStatement();
+			rs.close();
+			conn.close();
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-			
 		}
-		
-//		out.println("{\"name\" : \"This is test signal\"}");
-		
 		
 	}
 
