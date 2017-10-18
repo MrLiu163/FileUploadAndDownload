@@ -162,7 +162,7 @@ public class UploadHandleServletPro extends HttpServlet {
 							 List<File> srcFiles = new ArrayList<File>();
 							 File targetFile = new File(finalZipFilePath);
 							 srcFiles.add(targetFile);
-							 String testZipFileName = savePath + System.getProperty("file.separator") + "Liuningfei.zip";
+							 String testZipFileName = savePath + System.getProperty("file.separator") + "123456.zip";
 							 ZipHelper.zipFile(testZipFileName, srcFiles);
 							 return;
 							 */
@@ -215,25 +215,20 @@ public class UploadHandleServletPro extends HttpServlet {
 					 	e.printStackTrace();
 					 	request.setAttribute("message", "单个文件超出最大值！！！");
 					 	request.getRequestDispatcher("/message.jsp").forward(request, response);
-					 	PrintWriter out = response.getWriter();
-					    out.write("{\"message\":\"单个文件超出最大值！！！\"}");
 					 	return;
 				 } catch (FileUploadBase.SizeLimitExceededException e) {
 					 	e.printStackTrace();
 					 	request.setAttribute("message", "上传文件的总的大小超出限制的最大值！！！");
 					 	request.getRequestDispatcher("/message.jsp").forward(request, response);
-					 	PrintWriter out = response.getWriter();
-					    out.write("{\"message\":\"上传文件的总的大小超出限制的最大值！！！\"}");
 					 	return;
 				 } catch (Exception e) {
-					 message= "文件上传失败！";
 					 e.printStackTrace();   
-					 PrintWriter out = response.getWriter();
-					 out.write("{\"message\":\"文件上传失败！\"}");
+					 request.setAttribute("message", "文件上传失败！");
+					 request.getRequestDispatcher("/message.jsp").forward(request, response);
 				 }
 				 request.setAttribute("message",message);
 				 request.getRequestDispatcher("/message.jsp").forward(request, response);
-		
+				 
 	}
 
 	/**

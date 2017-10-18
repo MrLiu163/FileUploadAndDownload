@@ -19,6 +19,15 @@
 	</servlet-mapping> 
 	
 	<servlet>
+	<servlet-name>UploadHandleServletForApp</servlet-name>
+	<servlet-class>com.liuningfei.uploadFile.UploadHandleServletForApp</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>UploadHandleServletForApp</servlet-name>
+	<url-pattern>/UploadHandleServletForApp</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 	<servlet-name>ListFileServlet</servlet-name>
 	<servlet-class>com.liuningfei.uploadFile.ListFileServlet</servlet-class>
 	</servlet>

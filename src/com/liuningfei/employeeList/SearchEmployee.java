@@ -56,7 +56,7 @@ public class SearchEmployee extends HttpServlet {
                 // 输出数据
 //                finalResponseString = finalResponseString + "{\"id\":\"" + id + "\",\n" + 
 //                "\"name\":\"" + name + "\",\n" + "\"url\":\"" + url + "\"\n},";
-                finalResponseString = finalResponseString + "{\"id\":\"" + id + "\",\n" + 
+                finalResponseString = finalResponseString + "{\"id\":" + id + ",\n" + 
                       "\"name\":\"" + name + "\",\n" + "\"gender\":\"" + gender + "\",\n" + "\"phone\":\"" + phone + "\"\n},";
             }
             finalResponseString = finalResponseString + "]}";
