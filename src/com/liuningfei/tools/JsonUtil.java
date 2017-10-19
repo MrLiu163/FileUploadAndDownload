@@ -20,7 +20,15 @@ public static String object2json(Object obj) {
                  || obj instanceof Boolean || obj instanceof Short || obj instanceof Double
                  || obj instanceof Long || obj instanceof BigDecimal || obj instanceof BigInteger
                  || obj instanceof Byte) {
-               json.append("\"").append(string2json(obj.toString())).append("\"");
+            	 	if (obj instanceof String && ((String)obj).startsWith("[{")) { // 如果是数组处理好的json串 直接返回
+            	 		json.append(string2json(obj.toString()));
+            	 	} else if (obj instanceof String && ((String)obj).startsWith("{")) { // 如果是处理好的json串 直接返回
+            	 		json.append(obj.toString());
+            	 	} else if (obj instanceof Integer) { // 处理id 等 int
+            	 		json.append(obj.toString());
+            	 	} else {
+            	 		json.append("\"").append(string2json(obj.toString())).append("\"");
+            	 	}
              } else if (obj instanceof Object[]) {
                json.append(array2json((Object[]) obj));
              } else if (obj instanceof List) {
@@ -119,6 +127,9 @@ public static String set2json(Set<?> set) {
 public static String string2json(String s) {
              if (s == null)
                return "";
+             if (s.startsWith("[{")) { // 如果是数组处理好的json串 直接返回
+            	 	return s;
+             }
              StringBuilder sb = new StringBuilder();
              for (int i = 0; i < s.length(); i++) {
                char ch = s.charAt(i);

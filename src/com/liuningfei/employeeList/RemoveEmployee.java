@@ -2,6 +2,8 @@ package com.liuningfei.employeeList;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
+import com.liuningfei.tools.JsonUtil;
 
 /**
  * Servlet implementation class RemoveEmployee
@@ -39,15 +42,14 @@ public class RemoveEmployee extends HttpServlet {
 		 
 		// 从数据库移除
 		String sql;
-        String id = request.getParameter("id");
         String name = request.getParameter("name");
-        String gender = request.getParameter("gender");
-        String phone = request.getParameter("phone");
-//        sql = "SELECT id, name, gender, phone FROM employee";
-//        sql = "insert into employee(name, gender)values('1234test12', 'www.360.cn12')";
         sql = "delete from employee where name = \'" + name + "\'";
 		DatabaseConnectionHelper.executeSqliteOperationWithSqlString(sql);
-		out.write("{\"statusCode\" : \"0\"}");		
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("statusCode", "0");
+		jsonMap.put("message", "移除员工成功！");
+		jsonMap.put("data", "{}");
+		out.write(JsonUtil.map2json(jsonMap));		
 	}
 
 	/**

@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
+import com.liuningfei.tools.JsonUtil;
 
 //import com.mysql.jdbc.Connection;
 //import com.mysql.jdbc.Statement;
@@ -43,6 +47,7 @@ public class SearchEmployee extends HttpServlet {
 		
 		String sql = "SELECT id, name, gender, phone FROM employee";
 		ResultSet rs = DatabaseConnectionHelper.executeQueryOperationWithSqlString(sql);
+		/*
 		String finalResponseString = "{\"list\":" + "[";
         try {
         	// 展开结果集数据库
@@ -60,9 +65,38 @@ public class SearchEmployee extends HttpServlet {
                       "\"name\":\"" + name + "\",\n" + "\"gender\":\"" + gender + "\",\n" + "\"phone\":\"" + phone + "\"\n},";
             }
             finalResponseString = finalResponseString + "]}";
-            out.write(finalResponseString);            
-            // 完成后关闭
-            Connection conn = rs.getStatement().getConnection();
+            */
+		
+		String finalResponseString = ""; 
+		ArrayList<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
+		try {
+			// 展开结果集数据库
+			while(rs.next()){
+				// 通过字段检索
+				int id  = rs.getInt("id");
+				String name = rs.getString("name");
+//               String url = rs.getString("url");
+				String gender = rs.getString("gender");
+				String phone = rs.getString("phone");
+				Map<String, Object> tempMap = new HashMap<String, Object>(); 
+				tempMap.put("id", id);
+				tempMap.put("name", name);
+				tempMap.put("gender", gender);
+				tempMap.put("phone", phone);
+//				String tempStr = JsonUtil.map2json(tempMap);
+//				mapList.add(tempStr);
+				mapList.add(tempMap);
+			}
+			String listStr = JsonUtil.list2json(mapList);
+			Map<String, String> finalMap = new HashMap<String, String>(); 
+			finalMap.put("statusCode", "0");
+			finalMap.put("message", "查询成功");
+			finalMap.put("list", listStr);
+			finalResponseString = JsonUtil.map2json(finalMap);
+				
+			out.write(finalResponseString);            
+			// 完成后关闭
+			Connection conn = rs.getStatement().getConnection();
 			Statement stmt = rs.getStatement();
 			rs.close();
 			conn.close();

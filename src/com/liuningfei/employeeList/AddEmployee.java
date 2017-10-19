@@ -2,6 +2,8 @@ package com.liuningfei.employeeList;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
+import com.liuningfei.tools.JsonUtil;
 
 /**
  * Servlet implementation class AddEmployee
@@ -43,7 +46,11 @@ public class AddEmployee extends HttpServlet {
         String phone = request.getParameter("phone");
         String sql = "insert into employee(name, gender, phone)values(\'"+ name + "\',\'" + gender + "\',\'" + phone + "\')";
         DatabaseConnectionHelper.executeSqliteOperationWithSqlString(sql);
-        out.write("{\"statusCode\" : \"0\"}");
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("statusCode", "0");
+		jsonMap.put("message", "添加员工成功！");
+		jsonMap.put("data", "{}");
+		out.write(JsonUtil.map2json(jsonMap));	
         
 	}
 
