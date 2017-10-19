@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
 import com.liuningfei.tools.FileHandleHelper;
+import com.liuningfei.tools.JsonHandleHelper;
 
 /**
  * Servlet implementation class UploadHandleServletForApp
@@ -54,18 +55,9 @@ public class UploadHandleServletForApp extends HttpServlet {
 			//创建临时目录
 			tmpFile.mkdir();
 		}
-//		File file = new File(savePath);
-//		//判断上传文件的保存目录是否存在
-//		if (!file.exists() && !file.isDirectory()) {
-//			System.out.println(savePath+"目录不存在，需要创建");
-//			//创建目录
-//			file.mkdir();
-//		 }
 		
 		// 要压缩的文件路径
-		String finalZipFilePath = new String();
-		 //消息提示
-		 String message = "";
+//		String finalZipFilePath = new String();
 		 try{
 			 //使用Apache文件上传组件处理文件上传步骤：
 			 //1、创建一个DiskFileItemFactory工厂
@@ -179,7 +171,7 @@ public class UploadHandleServletForApp extends HttpServlet {
 					 out.close();
 					 //删除处理文件上传时生成的临时文件
 					 item.delete();
-					 message = "文件上传成功！路径为：" + finalSavePath;
+					 System.out.println("文件上传成功！路径为：" + finalSavePath);
 					 
 					 // 将文件信息存入数据库
 					 insertUploadFileInfoIntoDatabase(filename, insertFileUrl);
@@ -194,21 +186,24 @@ public class UploadHandleServletForApp extends HttpServlet {
 		 } catch (FileUploadBase.FileSizeLimitExceededException e) {
 			 	e.printStackTrace();
 			 	PrintWriter out = response.getWriter();
-			    out.write("{\"message\":\"单个文件超出最大值！！！\"}");
+//			    out.write("{\"message\":\"单个文件超出最大值！！！\"}");
+			    out.write(JsonHandleHelper.getResponseJsonStr("21", "单个文件超出最大值！！！", ""));
 			 	return;
 		 } catch (FileUploadBase.SizeLimitExceededException e) {
 			 	e.printStackTrace();
 			 	PrintWriter out = response.getWriter();
-			    out.write("{\"message\":\"上传文件的总的大小超出限制的最大值！！！\"}");
+//			    out.write("{\"message\":\"上传文件的总的大小超出限制的最大值！！！\"}");
+			 	out.write(JsonHandleHelper.getResponseJsonStr("21", "上传文件的总的大小超出限制的最大值！！！", ""));
 			 	return;
 		 } catch (Exception e) {
-			 message= "文件上传失败！";
 			 e.printStackTrace();   
 			 PrintWriter out = response.getWriter();
-			 out.write("{\"message\":\"文件上传失败！\"}");
+//			 out.write("{\"message\":\"文件上传失败！\"}");
+			 out.write(JsonHandleHelper.getResponseJsonStr("21", "文件上传失败！", ""));
 		 }
 		 PrintWriter out = response.getWriter();
-		 out.write("{\"message\":\"文件上传成功！请在电脑中查看\"}");
+//		 out.write("{\"message\":\"文件上传成功！请在电脑中查看\"}");
+		 out.write(JsonHandleHelper.getResponseJsonStr("0", "文件上传成功！请在电脑中查看", ""));
 	}
 
 	/**

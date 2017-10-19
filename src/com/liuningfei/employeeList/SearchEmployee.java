@@ -16,8 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
+import com.liuningfei.tools.JsonHandleHelper;
 import com.liuningfei.tools.JsonUtil;
-
+import com.liuningfei.tools.JsonHandleHelper;
 //import com.mysql.jdbc.Connection;
 //import com.mysql.jdbc.Statement;
 
@@ -87,13 +88,16 @@ public class SearchEmployee extends HttpServlet {
 //				mapList.add(tempStr);
 				mapList.add(tempMap);
 			}
+			
+			/*
 			String listStr = JsonUtil.list2json(mapList);
 			Map<String, String> finalMap = new HashMap<String, String>(); 
 			finalMap.put("statusCode", "0");
 			finalMap.put("message", "查询成功");
-			finalMap.put("list", listStr);
+			finalMap.put("data", listStr);
 			finalResponseString = JsonUtil.map2json(finalMap);
-				
+			*/
+			finalResponseString = JsonHandleHelper.getResponseJsonStr("0", "查询所有员工成功", mapList);
 			out.write(finalResponseString);            
 			// 完成后关闭
 			Connection conn = rs.getStatement().getConnection();

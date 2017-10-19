@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
+import com.liuningfei.tools.JsonHandleHelper;
 import com.liuningfei.tools.JsonUtil;
 
 /**
@@ -46,11 +47,18 @@ public class AddEmployee extends HttpServlet {
         String phone = request.getParameter("phone");
         String sql = "insert into employee(name, gender, phone)values(\'"+ name + "\',\'" + gender + "\',\'" + phone + "\')";
         DatabaseConnectionHelper.executeSqliteOperationWithSqlString(sql);
+        /*
         Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("statusCode", "0");
 		jsonMap.put("message", "添加员工成功！");
 		jsonMap.put("data", "{}");
 		out.write(JsonUtil.map2json(jsonMap));	
+		*/
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("name", name);
+		jsonMap.put("gender", gender);
+		jsonMap.put("phone", phone);
+        out.write(JsonHandleHelper.getResponseJsonStr("0", "添加员工成功", jsonMap));
         
 	}
 

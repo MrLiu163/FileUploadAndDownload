@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liuningfei.tools.DatabaseConnectionHelper;
+import com.liuningfei.tools.JsonHandleHelper;
 import com.liuningfei.tools.JsonUtil;
 
 /**
@@ -45,11 +46,17 @@ public class RemoveEmployee extends HttpServlet {
         String name = request.getParameter("name");
         sql = "delete from employee where name = \'" + name + "\'";
 		DatabaseConnectionHelper.executeSqliteOperationWithSqlString(sql);
+		/*
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
 		jsonMap.put("statusCode", "0");
 		jsonMap.put("message", "移除员工成功！");
 		jsonMap.put("data", "{}");
-		out.write(JsonUtil.map2json(jsonMap));		
+		out.write(JsonUtil.map2json(jsonMap));
+		*/
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("name", name);
+		jsonMap.put("message", "这个是不在的");
+		out.write(JsonHandleHelper.getResponseJsonStr("0", "查询所有员工成功", jsonMap));
 	}
 
 	/**
