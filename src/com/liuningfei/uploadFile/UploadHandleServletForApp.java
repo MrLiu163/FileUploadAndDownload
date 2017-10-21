@@ -85,19 +85,25 @@ public class UploadHandleServletForApp extends HttpServlet {
 			 //3、判断提交上来的数据是否是上传表单的数据
 			 if(!ServletFileUpload.isMultipartContent(request)){
 				 PrintWriter out = response.getWriter();
-				 out.write("{\"message\":\"不是上传表单的数据！！！\"}");
+				 out.write(JsonHandleHelper.getResponseJsonStr("21", "不是上传表单的数据！！！", ""));
 				 //按照传统方式获取数据
 				 return;
 			 }
-			 
-			//设置上传单个文件的大小的最大值，目前是设置为1024*1024字节，也就是1MB
-			 upload.setFileSizeMax(1024*1024);
-			 //设置上传文件总量的最大值，最大值=同时上传的多个文件的大小的最大值的和，目前设置为10MB
-			 upload.setSizeMax(1024*1024*10);
-			 
+			 //设置上传单个文件的大小的最大值，目前是设置为1024*1024*100字节，也就是100MB
+			 upload.setFileSizeMax(1024*1024*100);
+			 //设置上传文件总量的最大值，最大值=同时上传的多个文件的大小的最大值的和，目前设置为500MB
+			 upload.setSizeMax(1024*1024*100*5);
 			 //4、使用ServletFileUpload解析器解析上传数据，解析结果返回的是一个List<FileItem>集合，每一个FileItem对应一个Form表单的输入项
 			 List<FileItem> list = upload.parseRequest(request);
 			 for(FileItem item : list){
+				 System.out.println("file size = " + item.getSize());
+				 if (item.getSize() > 1024*1024*50) {
+					 System.out.println("文件大小超出最大值！！！");
+					 PrintWriter out = response.getWriter();
+					 out.write(JsonHandleHelper.getResponseJsonStr("21", "文件大小超出最大值！！！", ""));
+					 item.delete();
+					 return;
+				 }
 				 //如果fileitem中封装的是普通输入项的数据
 				 if(item.isFormField()){
 					 String name = item.getFieldName();
@@ -186,23 +192,21 @@ public class UploadHandleServletForApp extends HttpServlet {
 		 } catch (FileUploadBase.FileSizeLimitExceededException e) {
 			 	e.printStackTrace();
 			 	PrintWriter out = response.getWriter();
-//			    out.write("{\"message\":\"单个文件超出最大值！！！\"}");
+			 	System.out.println("---->>>> 单个文件超出最大值！！！");
 			    out.write(JsonHandleHelper.getResponseJsonStr("21", "单个文件超出最大值！！！", ""));
 			 	return;
 		 } catch (FileUploadBase.SizeLimitExceededException e) {
 			 	e.printStackTrace();
 			 	PrintWriter out = response.getWriter();
-//			    out.write("{\"message\":\"上传文件的总的大小超出限制的最大值！！！\"}");
+			 	System.out.println("---->>>> 上传文件的总的大小超出限制的最大值！！！");
 			 	out.write(JsonHandleHelper.getResponseJsonStr("21", "上传文件的总的大小超出限制的最大值！！！", ""));
 			 	return;
 		 } catch (Exception e) {
 			 e.printStackTrace();   
 			 PrintWriter out = response.getWriter();
-//			 out.write("{\"message\":\"文件上传失败！\"}");
 			 out.write(JsonHandleHelper.getResponseJsonStr("21", "文件上传失败！", ""));
 		 }
 		 PrintWriter out = response.getWriter();
-//		 out.write("{\"message\":\"文件上传成功！请在电脑中查看\"}");
 		 out.write(JsonHandleHelper.getResponseJsonStr("0", "文件上传成功！请在电脑中查看", ""));
 	}
 
